@@ -23,10 +23,17 @@ const NavBar = () => {
 
   return (
     <div className="navbar bg-base-300">
-      <div className="flex-1">
+      <div className="flex items-center justify-between bg-red-400 w-full">
         <Link to="/" className="btn btn-ghost text-xl">
           👩‍💻 TinderClone
         </Link>
+        {!user ? (
+          <Link to="/login" className="pr-5">
+            Login
+          </Link>
+        ) : (
+          ''
+        )}
       </div>
       {user && (
         <div className="flex gap-2 mx-5 items-center">

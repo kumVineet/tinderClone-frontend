@@ -5,7 +5,7 @@ import { BASE_URL } from '../utils/constants';
 import { useDispatch } from 'react-redux';
 import { addUser } from '../utils/userSlice';
 
-const EditProfile = ({ user }) => {
+const EditProfile = ( {user} ) => {
   const [firstName, setFirstName] = useState(user.firstName);
   const [lastName, setLastName] = useState(user.lastName);
   const [photo, setPhotoUrl] = useState(user.photo);
@@ -126,7 +126,7 @@ const EditProfile = ({ user }) => {
             </div>
           </div>
         </div>
-        <UserCard user={{ firstName, lastName, photo, age, gender, about }} />
+        <UserCard user={ user } />
       </div>
       {showToast && (
         <div className="toast toast-top toast-center">
