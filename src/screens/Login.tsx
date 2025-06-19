@@ -1,8 +1,10 @@
+'use client'
+
 import { useState } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { addUser } from '../utils/userSlice';
-import { useNavigate } from 'react-router';
+import { addUser } from '../features/user/userSlice';
+import { useRouter } from 'next/navigation';
 import { BASE_URL } from '../utils/constants';
 import {
   PassKeyIcon,
@@ -13,7 +15,7 @@ import {
 
 const Login = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const [emailId, setEmailId] = useState('');
   const [password, setPassword] = useState('');
@@ -57,7 +59,7 @@ const Login = () => {
           { withCredentials: true }
         );
         dispatch(addUser(res.data));
-        navigate('/');
+        router.push('/');
       } catch (err) {
         setGeneralError(err?.response?.data?.message || 'Something went wrong');
       }
@@ -73,7 +75,7 @@ const Login = () => {
           { withCredentials: true }
         );
         dispatch(addUser(res.data));
-        navigate('/profile');
+        router.push('/profile');
       } catch (err) {
         setGeneralError(err?.response?.data?.message || 'Something went wrong');
       }

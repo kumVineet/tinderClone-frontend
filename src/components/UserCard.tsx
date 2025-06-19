@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { BASE_URL } from '../utils/constants';
 import { useDispatch } from 'react-redux';
-import { removeUserFromFeed } from '../utils/feedSlice';
+import { removeUserFromFeed } from '../features/feed/feedSlice';
 
 const UserCard = ({ user }) => {
   const { _id, firstName, lastName, photo, age, gender, about } = user;
@@ -30,7 +30,7 @@ const UserCard = ({ user }) => {
         <div className="card-actions justify-center my-4">
           <button
             className="btn btn-primary"
-            onClick={() => handleSendRequest('ignored', _id)}
+            onClick={() => handleSendRequest('ignore', _id)}
           >
             Ignore
           </button>

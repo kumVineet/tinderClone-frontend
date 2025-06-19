@@ -1,6 +1,26 @@
 import React from 'react';
 
-const PassKeyIcon = (props) => (
+export const LogoIcon = (props) => (
+  <svg
+    viewBox="0 0 48 48"
+    width="48"
+    height="48"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <path
+      d="M24.5 6C24.5 6 36 16 36 28C36 36 29 42 24 42C19 42 12 36 12 28C12 16 24.5 6 24.5 6Z"
+      fill="#FF6B6B"
+    />
+    <path
+      d="M24.5 6C24.5 6 32 14 32 24C32 31 27 36 24 36C21 36 16 31 16 24C16 14 24.5 6 24.5 6Z"
+      fill="#FFB199"
+    />
+  </svg>
+);
+
+export const PassKeyIcon = (props) => (
   <svg
     className="h-[1em] opacity-50"
     xmlns="http://www.w3.org/2000/svg"
@@ -19,7 +39,7 @@ const PassKeyIcon = (props) => (
   </svg>
 );
 
-const UserIcon = (props) => (
+export const UserIcon = (props) => (
   <svg
     className="h-[1em] opacity-50"
     xmlns="http://www.w3.org/2000/svg"
@@ -79,5 +99,3 @@ export const EyeOffIcon = (props) => (
     <path strokeLinecap="round" strokeLinejoin="round" d="M3 3l18 18" />
   </svg>
 );
-
-export { PassKeyIcon, UserIcon };
