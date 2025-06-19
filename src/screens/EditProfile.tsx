@@ -37,7 +37,7 @@ const EditProfile = ({ user }: { user: any }) => {
       setTimeout(() => {
         setShowToast(false);
       }, 3000);
-    } catch (err) {
+    } catch (err: any) {
       setError(err.response.data);
     }
   };
@@ -127,7 +127,7 @@ const EditProfile = ({ user }: { user: any }) => {
           </div>
         </div>
         <UserCard
-          user={{ firstName, lastName, photo, age, gender, about } || user}
+          user={{ _id: user._id, firstName, lastName, photo, age, gender, about }}
         />
       </div>
       {showToast && (

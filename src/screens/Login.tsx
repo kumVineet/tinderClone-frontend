@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useState } from 'react';
 import axios from 'axios';
@@ -13,21 +13,67 @@ import {
   EyeOffIcon,
 } from '../assets/icons/Icons';
 
+type Errors = {
+  email?: string;
+  password?: string;
+  firstName?: string;
+  lastName?: string;
+};
+
+type LookingForOptions = {
+  label: string;
+  value: string;
+};
+
 const Login = () => {
   const dispatch = useDispatch();
   const router = useRouter();
+
+  const genderOptions = [
+    { label: 'Man', value: 'man' },
+    { label: 'Woman', value: 'woman' },
+    { label: 'Other', value: 'other' }
+  ];
+
+  const interestOptions = [
+    { label: 'Man', value: 'man' },
+    { label: 'Woman', value: 'woman' },
+    { label: 'Everyone', value: 'everyone' }
+  ];
+
+  const lookingForOptions: LookingForOptions[] = [
+    { label: 'Short-term', value: 'short-term' },
+    { label: 'Long-term', value: 'long-term' },
+    { label: 'Not-decided', value: 'not-decided' },
+  ];
 
   const [emailId, setEmailId] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [month, setMonth] = useState('');
+  const [date, setDate] = useState('');
+  const [year, setYear] = useState('');
+  const [gender, setGender] = useState('');
+  const [interest, setInterest] = useState('');
+  const [lookingFor, setLookingFor] = useState<string[]>([]);
   const [isLoginForm, setIsLoginForm] = useState(true);
-  const [error, setError] = useState({});
+  const [error, setError] = useState<Errors>({});
   const [generalError, setGeneralError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
+  console.log('Looking for:', lookingFor);
+
+  const toggleLookingFor = (value: string) => {
+    setLookingFor((prev) =>
+      prev.includes(value)
+        ? prev.filter((item) => item !== value)
+        : [...prev, value]
+    );
+  };
+
   const validate = () => {
-    const newErrors = {};
+    const newErrors: Errors = { ...error };
     if (!emailId.trim()) {
       newErrors.email = 'Email is required';
     }
@@ -60,7 +106,7 @@ const Login = () => {
         );
         dispatch(addUser(res.data));
         router.push('/');
-      } catch (err) {
+      } catch (err: any) {
         setGeneralError(err?.response?.data?.message || 'Something went wrong');
       }
     }
@@ -76,7 +122,7 @@ const Login = () => {
         );
         dispatch(addUser(res.data));
         router.push('/profile');
-      } catch (err) {
+      } catch (err: any) {
         setGeneralError(err?.response?.data?.message || 'Something went wrong');
       }
     }
@@ -91,10 +137,10 @@ const Login = () => {
           </h2>
 
           {!isLoginForm && (
-            <>
+            <div className="flex justify-between">
               <div className="mb-2 mt-4">
                 <label
-                  htmlFor="email"
+                  htmlFor="firstName"
                   className="block text-sm font-medium mb-1"
                 >
                   First Name
@@ -102,7 +148,7 @@ const Login = () => {
                 <input
                   type="text"
                   value={firstName}
-                  className="w-full border px-3 py-2 rounded"
+                  className="w-40 border px-3 py-2 rounded"
                   onChange={(e) => setFirstName(e.target.value)}
                 />
                 {error.firstName && (
@@ -110,9 +156,9 @@ const Login = () => {
                 )}
               </div>
 
-              <div className="mb-2 mt-2">
+              <div className="mb-2 mt-4">
                 <label
-                  htmlFor="email"
+                  htmlFor="lastName"
                   className="block text-sm font-medium mb-1"
                 >
                   Last Name
@@ -120,14 +166,14 @@ const Login = () => {
                 <input
                   type="text"
                   value={lastName}
-                  className="w-full border px-3 py-2 rounded"
+                  className="w-40 border px-3 py-2 rounded"
                   onChange={(e) => setLastName(e.target.value)}
                 />
                 {error.lastName && (
                   <p className="text-red-500 text-sm mt-1">{error.lastName}</p>
                 )}
               </div>
-            </>
+            </div>
           )}
 
           <div className="mb-4 mt-2">
@@ -150,6 +196,103 @@ const Login = () => {
               <p className="text-red-500 text-sm mt-1">{error.email}</p>
             )}
           </div>
+
+          {!isLoginForm && (
+            <>
+              <div>
+                <p className="block text-sm font-medium mb-1">Birthday</p>
+                <div className="flex justify-between">
+                  <div>
+                    <label
+                      htmlFor="month"
+                      className="block text-sm font-medium mb-1"
+                    >
+                      Month
+                    </label>
+                    <input
+                      type="number"
+                      min="1"
+                      max="12"
+                      value={month}
+                      className="w-18 border px-3 py-2 rounded text-center"
+                      onChange={(e) => setMonth(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="date"
+                      className="block text-sm font-medium mb-1"
+                    >
+                      Date
+                    </label>
+                    <input
+                      type="number"
+                      min="1"
+                      max="31"
+                      value={date}
+                      className="w-18 border px-3 py-2 rounded text-center"
+                      onChange={(e) => setDate(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="Year"
+                      className="block text-sm font-medium mb-1"
+                    >
+                      Year
+                    </label>
+                    <input
+                      type="number"
+                      min="1965"
+                      value={year}
+                      className="w-18 border px-3 py-2 rounded text-center"
+                      onChange={(e) => setYear(e.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Gender</label>
+                <div className="flex justify-between">
+                  {genderOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => setGender(option.value)}
+                      className={`px-8 py-2 rounded-full border-2" ${gender === option.value ? 'border-red-400' : 'border-white-400'
+                        }`}
+                    >{option.label}</button>)
+                  )}
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Interested In</label>
+                <div className="flex justify-between">
+                  {interestOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => setInterest(option.value)}
+                      className={`px-8 py-2 rounded-full border-2" ${interest === option.value ? 'border-red-400' : 'border-white-400'
+                        }`}
+                    >{option.label}</button>)
+                  )}
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Looking For</label>
+                <div className="flex justify-between">
+                  {lookingForOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      type="button"
+                      className={`px-8 py-2 rounded-full border-2" ${lookingFor.includes(option.value) ? 'border-red-400' : 'border-white-400'
+                        }`}
+                      onClick={() => toggleLookingFor(option.value)}
+                    >{option.label}</button>)
+                  )}
+                </div>
+              </div>
+            </>
+          )}
 
           <div className="mb-6">
             <label
