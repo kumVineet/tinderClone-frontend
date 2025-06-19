@@ -4,10 +4,8 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
-import { addUser } from '../../utils/userSlice'
+import { addUser } from '../../features/user/userSlice'
 import { BASE_URL } from '../../utils/constants'
-import NavBar from '../../components/NavBar'
-import Footer from '../../components/Footer'
 import Connections from '../../screens/Connections'
 
 export default function ConnectionsPage() {
@@ -36,11 +34,9 @@ export default function ConnectionsPage() {
 
     return (
         <div className="min-h-screen flex flex-col">
-            <NavBar />
             <main className="flex-1">
                 <Connections />
             </main>
-            <Footer />
         </div>
     )
 } 

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { addUser } from '../utils/userSlice';
+import { addUser } from '../features/user/userSlice';
 import { useRouter } from 'next/navigation';
 import { BASE_URL } from '../utils/constants';
 import {
