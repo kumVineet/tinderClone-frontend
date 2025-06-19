@@ -3,9 +3,9 @@ import UserCard from '../components/UserCard';
 import axios from 'axios';
 import { BASE_URL } from '../utils/constants';
 import { useDispatch } from 'react-redux';
-import { addUser } from '../utils/userSlice';
+import { addUser } from '../features/user/userSlice';
 
-const EditProfile = ({ user }) => {
+const EditProfile = ({ user }: { user: any }) => {
   const [firstName, setFirstName] = useState(user.firstName);
   const [lastName, setLastName] = useState(user.lastName);
   const [photo, setPhotoUrl] = useState(user.photo);
