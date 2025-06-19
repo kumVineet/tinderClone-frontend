@@ -23,6 +23,7 @@ const NavBar = () => {
       console.error(err)
     }
   }
+  console.log(user)
   return (
     <div className="navbar bg-base-100 shadow-sm">
       <div className="flex-1">
@@ -33,14 +34,14 @@ const NavBar = () => {
       </div>
       {user && (
         <div className="flex gap-2 mx-5 items-center">
-          <p>Welcome! {user?.user?.firstName}</p>
+          <p>Welcome! {user?.firstName}</p>
           <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
               <div className="w-10 rounded-full">
                 <img
                   alt="Tailwind CSS Navbar component"
                   src={
-                    user?.user?.photo ??
+                    user?.photo ??
                     'https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp'
                   } />
               </div>
