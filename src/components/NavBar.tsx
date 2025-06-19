@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { LogoIcon } from '../assets/icons/Icons';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import { BASE_URL } from '../utils/constants';
+import { BASE_URL } from '../constants/ApiConstant';
 import { removeUser } from '../features/user/userSlice';
 import { useSelector, useDispatch } from 'react-redux';
 
