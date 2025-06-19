@@ -75,17 +75,17 @@ Router=/profile => Profile
 
 # Ngxinx config:
 
-        Frontend = http://43.204.96.49/
-        Backend = http://43.204.96.49:7777/
+        Frontend = http://51.20.193.114/
+        Backend = http://51.20.193.114:3000/
 
-        Domain name = devtinder.com => 43.204.96.49
+        Domain name = devtinder.com => 51.20.193.114
 
         Frontend = devtinder.com
-        Backend = devtinder.com:7777 => devtinder.com/api
+        Backend = devtinder.com:3000 => devtinder.com/api
 
         nginx config :
 
-        server_name 43.204.96.49;
+        server_name 51.20.193.114;
 
         location /api/ {
             proxy_pass http://localhost:3000/;  # Pass the request to the Node.js app
