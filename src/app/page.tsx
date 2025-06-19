@@ -4,16 +4,15 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
-import { addUser } from '../utils/userSlice'
+import { addUser } from '../features/user/userSlice'
 import { BASE_URL } from '../utils/constants'
-import NavBar from '../components/NavBar'
-import Footer from '../components/Footer'
 import Feed from '../screens/Feed'
+import { RootState } from '../store/store'
 
 export default function HomePage() {
     const dispatch = useDispatch()
     const router = useRouter()
-    const userData = useSelector((store) => store.user)
+    const userData = useSelector((store: RootState) => store.user)
 
     const fetchUser = async () => {
         if (userData) return
@@ -22,7 +21,7 @@ export default function HomePage() {
                 withCredentials: true,
             })
             dispatch(addUser(res.data))
-        } catch (err) {
+        } catch (err: any) {
             if (err.status === 401) {
                 router.push('/login')
             }
@@ -35,12 +34,8 @@ export default function HomePage() {
     }, [])
 
     return (
-        <div >
-            <NavBar />
-            <main className="flex-1">
-                <Feed />
-            </main>
-            <Footer />
-        </div>
+        <main className="flex-1">
+            <Feed />
+        </main>
     )
 } 
