@@ -4,9 +4,16 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "qa": "next qa",
+    "prod": "next prod",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build:dev": "cross-env NODE_ENV=development next build",
+    "build:qa": "cross-env NODE_ENV=production ENV=qa next build",
+    "build:prod": "cross-env NODE_ENV=production next build",
+    "start:dev": "next start",
+    "start:qa": "cross-env ENV=qa next start",
+    "start:prod": "next start"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.2",
@@ -26,6 +33,7 @@
     "@types/react-dom": "^19.1.2",
     "autoprefixer": "^10.4.20",
     "daisyui": "^5.0.40",
+    "dotenv": "^16.5.0",
     "eslint": "^9.25.0",
     "eslint-config-next": "^15.0.0",
     "eslint-plugin-react-hooks": "^5.2.0",
