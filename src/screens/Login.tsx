@@ -32,13 +32,13 @@ const Login = () => {
   const genderOptions = [
     { label: 'Man', value: 'man' },
     { label: 'Woman', value: 'woman' },
-    { label: 'Other', value: 'other' }
+    { label: 'Other', value: 'other' },
   ];
 
   const interestOptions = [
     { label: 'Man', value: 'man' },
     { label: 'Woman', value: 'woman' },
-    { label: 'Everyone', value: 'everyone' }
+    { label: 'Everyone', value: 'everyone' },
   ];
 
   const lookingForOptions: LookingForOptions[] = [
@@ -258,37 +258,58 @@ const Login = () => {
                     <button
                       key={option.value}
                       onClick={() => setGender(option.value)}
-                      className={`px-8 py-2 rounded-full border-2" ${gender === option.value ? 'border-red-400' : 'border-white-400'
-                        }`}
-                    >{option.label}</button>)
-                  )}
+                      className={`px-8 py-2 rounded-full border-2 font-bold transition-all`}
+                      style={{
+                        borderColor:
+                          gender === option.value ? '#f87171' : '#ffffff',
+                        outline: 'none',
+                        boxShadow: 'none',
+                      }}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Interested In</label>
+                <label className="block text-sm font-medium mb-1">
+                  Interested In
+                </label>
                 <div className="flex justify-between">
                   {interestOptions.map((option) => (
                     <button
                       key={option.value}
                       onClick={() => setInterest(option.value)}
-                      className={`px-8 py-2 rounded-full border-2" ${interest === option.value ? 'border-red-400' : 'border-white-400'
-                        }`}
-                    >{option.label}</button>)
-                  )}
+                      className={`px-8 py-2 rounded-full border-2" ${
+                        interest === option.value
+                          ? 'border-red-400'
+                          : 'border-white-400'
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Looking For</label>
+                <label className="block text-sm font-medium mb-1">
+                  Looking For
+                </label>
                 <div className="flex justify-between">
                   {lookingForOptions.map((option) => (
                     <button
                       key={option.value}
                       type="button"
-                      className={`px-8 py-2 rounded-full border-2" ${lookingFor.includes(option.value) ? 'border-red-400' : 'border-white-400'
-                        }`}
+                      className={`px-8 py-2 rounded-full border-2" ${
+                        lookingFor.includes(option.value)
+                          ? 'border-red-400'
+                          : 'border-white-400'
+                      }`}
                       onClick={() => toggleLookingFor(option.value)}
-                    >{option.label}</button>)
-                  )}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
                 </div>
               </div>
             </>
