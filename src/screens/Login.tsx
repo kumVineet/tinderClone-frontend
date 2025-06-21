@@ -258,7 +258,7 @@ const Login = () => {
                     <button
                       key={option.value}
                       onClick={() => setGender(option.value)}
-                      className={`px-8 py-2 rounded-full border-2 font-bold transition-all`}
+                      className={"px-8 py-2 rounded-full border-2 font-bold transition-all"}
                       style={{
                         borderColor:
                           gender === option.value ? '#f87171' : '#ffffff',
@@ -280,11 +280,13 @@ const Login = () => {
                     <button
                       key={option.value}
                       onClick={() => setInterest(option.value)}
-                      className={`px-8 py-2 rounded-full border-2" ${
-                        interest === option.value
-                          ? 'border-red-400'
-                          : 'border-white-400'
-                      }`}
+                      className={"px-8 py-2 rounded-full border-2 font-bold transition-all"}
+                      style={{
+                        borderColor:
+                          interest === option.value ? '#f87171' : '#ffffff',
+                        outline: 'none',
+                        boxShadow: 'none',
+                      }}
                     >
                       {option.label}
                     </button>
@@ -300,11 +302,13 @@ const Login = () => {
                     <button
                       key={option.value}
                       type="button"
-                      className={`px-8 py-2 rounded-full border-2" ${
-                        lookingFor.includes(option.value)
-                          ? 'border-red-400'
-                          : 'border-white-400'
-                      }`}
+                      className={"px-8 py-2 rounded-full border-2 font-bold transition-all"}
+                      style={{
+                        borderColor:
+                          lookingFor.includes(option.value) ? '#f87171' : '#ffffff',
+                        outline: 'none',
+                        boxShadow: 'none',
+                      }}
                       onClick={() => toggleLookingFor(option.value)}
                     >
                       {option.label}
