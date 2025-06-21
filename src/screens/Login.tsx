@@ -47,47 +47,59 @@ const Login = () => {
     { label: 'Not-decided', value: 'not-decided' },
   ];
 
-  const [emailId, setEmailId] = useState('');
-  const [password, setPassword] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [month, setMonth] = useState('');
-  const [date, setDate] = useState('');
-  const [year, setYear] = useState('');
-  const [gender, setGender] = useState('');
-  const [interest, setInterest] = useState('');
-  const [lookingFor, setLookingFor] = useState<string[]>([]);
-  const [isLoginForm, setIsLoginForm] = useState(true);
-  const [error, setError] = useState<Errors>({});
-  const [generalError, setGeneralError] = useState('');
+  const [formfields, setFormFields] = useState<{
+    firstName: string;
+    lastName: string;
+    emailId: string;
+    password: string;
+    month: number;
+    date: number;
+    year: number;
+    gender: string;
+    interest: string;
+    lookingFor: string[];
+  }>({
+    firstName: '',
+    lastName: '',
+    emailId: '',
+    password: '',
+    month: 1,
+    date: 1,
+    year: 1965,
+    gender: '',
+    interest: '',
+    lookingFor: [],
+  });
   const [showPassword, setShowPassword] = useState(false);
-
-  console.log('Looking for:', lookingFor);
+  const [isLoginForm, setIsLoginForm] = useState(true);
+  const [generalError, setGeneralError] = useState('');
+  const [error, setError] = useState<Errors>({});
 
   const toggleLookingFor = (value: string) => {
-    setLookingFor((prev) =>
-      prev.includes(value)
-        ? prev.filter((item) => item !== value)
-        : [...prev, value]
-    );
+    setFormFields((prev) => ({
+      ...prev,
+      lookingFor: prev.lookingFor.includes(value)
+        ? prev.lookingFor.filter((item) => item !== value)
+        : [...prev.lookingFor, value],
+    }));
   };
 
   const validate = () => {
     const newErrors: Errors = { ...error };
-    if (!emailId.trim()) {
+    if (!formfields.emailId.trim()) {
       newErrors.email = 'Email is required';
     }
-    if (!password) {
+    if (!formfields.password) {
       newErrors.password = 'Password is required';
-    } else if (password.length < 6) {
+    } else if (formfields.password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters';
     }
 
     if (!isLoginForm) {
-      if (!firstName.trim()) {
+      if (!formfields.firstName.trim()) {
         newErrors.firstName = 'First Name is required';
       }
-      if (!lastName.trim()) {
+      if (!formfields.lastName.trim()) {
         newErrors.lastName = 'Last Name is required';
       }
     }
@@ -101,7 +113,7 @@ const Login = () => {
       try {
         const res = await axios.post(
           `${BASE_URL}/login`,
-          { email: emailId, password },
+          { email: formfields.emailId, password: formfields.password },
           { withCredentials: true }
         );
         dispatch(addUser(res.data));
@@ -117,7 +129,7 @@ const Login = () => {
       try {
         const res = await axios.post(
           `${BASE_URL}/signup`,
-          { firstName, lastName, email: emailId, password },
+          { formfields },
           { withCredentials: true }
         );
         dispatch(addUser(res.data));
@@ -136,8 +148,10 @@ const Login = () => {
             {isLoginForm ? 'Login' : 'Sign Up'}
           </h2>
 
+          {/* Name */}
           {!isLoginForm && (
             <div className="flex justify-between">
+              {/* FirstNamne */}
               <div className="mb-2 mt-4">
                 <label
                   htmlFor="firstName"
@@ -147,15 +161,21 @@ const Login = () => {
                 </label>
                 <input
                   type="text"
-                  value={firstName}
+                  value={formfields.firstName}
                   className="w-40 border px-3 py-2 rounded"
-                  onChange={(e) => setFirstName(e.target.value)}
+                  onChange={(e) => {
+                    setFormFields((prev) => ({
+                      ...prev,
+                      firstName: e.target.value,
+                    }));
+                  }}
                 />
                 {error.firstName && (
                   <p className="text-red-500 text-sm mt-1">{error.firstName}</p>
                 )}
               </div>
 
+              {/* LatName */}
               <div className="mb-2 mt-4">
                 <label
                   htmlFor="lastName"
@@ -165,9 +185,14 @@ const Login = () => {
                 </label>
                 <input
                   type="text"
-                  value={lastName}
+                  value={formfields.lastName}
                   className="w-40 border px-3 py-2 rounded"
-                  onChange={(e) => setLastName(e.target.value)}
+                  onChange={(e) => {
+                    setFormFields((prev) => ({
+                      ...prev,
+                      lastName: e.target.value,
+                    }));
+                  }}
                 />
                 {error.lastName && (
                   <p className="text-red-500 text-sm mt-1">{error.lastName}</p>
@@ -176,6 +201,7 @@ const Login = () => {
             </div>
           )}
 
+          {/* Email */}
           <div className="mb-4 mt-2">
             <label htmlFor="email" className="block text-sm font-medium mb-1">
               Email
@@ -187,8 +213,13 @@ const Login = () => {
               <input
                 type="email"
                 id="email"
-                value={emailId}
-                onChange={(e) => setEmailId(e.target.value)}
+                value={formfields.emailId}
+                onChange={(e) => {
+                  setFormFields((prev) => ({
+                    ...prev,
+                    emailId: e.target.value,
+                  }));
+                }}
                 className="w-full border px-3 py-2 pl-10 rounded"
               />
             </div>
@@ -199,9 +230,11 @@ const Login = () => {
 
           {!isLoginForm && (
             <>
+              {/* Birthday */}
               <div>
                 <p className="block text-sm font-medium mb-1">Birthday</p>
                 <div className="flex justify-between">
+                  {/* Month */}
                   <div>
                     <label
                       htmlFor="month"
@@ -213,11 +246,17 @@ const Login = () => {
                       type="number"
                       min="1"
                       max="12"
-                      value={month}
+                      value={formfields.month}
                       className="w-18 border px-3 py-2 rounded text-center"
-                      onChange={(e) => setMonth(e.target.value)}
+                      onChange={(e) => {
+                        setFormFields((prev) => ({
+                          ...prev,
+                          month: Number(e.target.value),
+                        }));
+                      }}
                     />
                   </div>
+                  {/* Date */}
                   <div>
                     <label
                       htmlFor="date"
@@ -229,11 +268,17 @@ const Login = () => {
                       type="number"
                       min="1"
                       max="31"
-                      value={date}
+                      value={formfields.date}
                       className="w-18 border px-3 py-2 rounded text-center"
-                      onChange={(e) => setDate(e.target.value)}
+                      onChange={(e) => {
+                        setFormFields((prev) => ({
+                          ...prev,
+                          date: Number(e.target.value),
+                        }));
+                      }}
                     />
                   </div>
+                  {/* Year */}
                   <div>
                     <label
                       htmlFor="Year"
@@ -244,24 +289,37 @@ const Login = () => {
                     <input
                       type="number"
                       min="1965"
-                      value={year}
+                      value={formfields.year}
                       className="w-18 border px-3 py-2 rounded text-center"
-                      onChange={(e) => setYear(e.target.value)}
+                      onChange={(e) => {
+                        setFormFields((prev) => ({
+                          ...prev,
+                          year: Number(e.target.value),
+                        }));
+                      }}
                     />
                   </div>
                 </div>
               </div>
+              {/* Gender */}
               <div>
                 <label className="block text-sm font-medium mb-1">Gender</label>
                 <div className="flex justify-between">
                   {genderOptions.map((option) => (
                     <button
                       key={option.value}
-                      onClick={() => setGender(option.value)}
-                      className={"px-8 py-2 rounded-full border-2 font-bold transition-all"}
+                      onClick={() => {
+                        setFormFields((prev) => ({
+                          ...prev,
+                          gender: option.value,
+                        }));
+                      }}
+                      className={
+                        'px-8 py-2 rounded-full border-2 font-bold transition-all'
+                      }
                       style={{
                         borderColor:
-                          gender === option.value ? '#f87171' : '#ffffff',
+                          formfields.gender === option.value ? '#f87171' : '#ffffff',
                         outline: 'none',
                         boxShadow: 'none',
                       }}
@@ -271,6 +329,7 @@ const Login = () => {
                   ))}
                 </div>
               </div>
+              {/* Interest */}
               <div>
                 <label className="block text-sm font-medium mb-1">
                   Interested In
@@ -279,11 +338,18 @@ const Login = () => {
                   {interestOptions.map((option) => (
                     <button
                       key={option.value}
-                      onClick={() => setInterest(option.value)}
-                      className={"px-8 py-2 rounded-full border-2 font-bold transition-all"}
+                      onClick={() => {
+                        setFormFields((prev) => ({
+                          ...prev,
+                          interest: option.value,
+                        }));
+                      }}
+                      className={
+                        'px-8 py-2 rounded-full border-2 font-bold transition-all'
+                      }
                       style={{
                         borderColor:
-                          interest === option.value ? '#f87171' : '#ffffff',
+                          formfields.interest === option.value ? '#f87171' : '#ffffff',
                         outline: 'none',
                         boxShadow: 'none',
                       }}
@@ -293,6 +359,7 @@ const Login = () => {
                   ))}
                 </div>
               </div>
+              {/* LookingFor */}
               <div>
                 <label className="block text-sm font-medium mb-1">
                   Looking For
@@ -302,10 +369,13 @@ const Login = () => {
                     <button
                       key={option.value}
                       type="button"
-                      className={"px-8 py-2 rounded-full border-2 font-bold transition-all"}
+                      className={
+                        'px-8 py-2 rounded-full border-2 font-bold transition-all'
+                      }
                       style={{
-                        borderColor:
-                          lookingFor.includes(option.value) ? '#f87171' : '#ffffff',
+                        borderColor: formfields.lookingFor.includes(option.value)
+                          ? '#f87171'
+                          : '#ffffff',
                         outline: 'none',
                         boxShadow: 'none',
                       }}
@@ -318,7 +388,7 @@ const Login = () => {
               </div>
             </>
           )}
-
+          {/* Password */}
           <div className="mb-6">
             <label
               htmlFor="password"
@@ -333,8 +403,13 @@ const Login = () => {
               <input
                 type={showPassword ? 'text' : 'password'}
                 id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={formfields.password}
+                onChange={(e) => {
+                  setFormFields((prev) => ({
+                    ...prev,
+                    password: e.target.value,
+                  }));
+                }}
                 className="w-full border px-3 py-2 pl-10 rounded"
               />
               <span
