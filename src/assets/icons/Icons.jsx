@@ -1,21 +1,8 @@
 import React from 'react';
 
 const PassKeyIcon = (props) => (
-  <svg
-    className="h-[1em] opacity-50"
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-  >
-    <g
-      strokeLinejoin="round"
-      strokeLinecap="round"
-      strokeWidth="2.5"
-      fill="none"
-      stroke="white"
-    >
-      <path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"></path>
-      <circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle>
-    </g>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120" width="64" height="64" fill="white">
+    <path d="M50.5,0 C60,20 45,30 45,45 C45,50 50,55 55,60 C60,65 65,70 65,80 C65,90 60,100 50,100 C40,100 30,90 30,75 C30,60 45,45 30,25 C15,40 5,60 5,80 C5,102 23,120 50,120 C77,120 95,102 95,80 C95,45 70,25 50.5,0 Z" />
   </svg>
 );
 
