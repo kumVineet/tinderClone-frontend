@@ -3,11 +3,21 @@ import { BASE_URL } from '../utils/constants';
 import { useDispatch } from 'react-redux';
 import { removeUserFromFeed } from '../features/feed/feedSlice';
 
-const UserCard = ({ user }) => {
+interface User {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  photo: string;
+  age?: number;
+  gender?: string;
+  about?: string;
+}
+
+const UserCard = ({ user }: { user: User }) => {
   const { _id, firstName, lastName, photo, age, gender, about } = user;
   const dispatch = useDispatch();
 
-  const handleSendRequest = async (status, userId) => {
+  const handleSendRequest = async (status: string, userId: string) => {
     try {
       const res = await axios.post(
         BASE_URL + '/request/send/' + status + '/' + userId,

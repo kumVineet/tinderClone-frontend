@@ -1,23 +1,9 @@
 import React from 'react';
 
 export const LogoIcon = (props) => (
-  <svg
-    viewBox="0 0 48 48"
-    width="48"
-    height="48"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
-    <path
-      d="M24.5 6C24.5 6 36 16 36 28C36 36 29 42 24 42C19 42 12 36 12 28C12 16 24.5 6 24.5 6Z"
-      fill="#FF6B6B"
-    />
-    <path
-      d="M24.5 6C24.5 6 32 14 32 24C32 31 27 36 24 36C21 36 16 31 16 24C16 14 24.5 6 24.5 6Z"
-      fill="#FFB199"
-    />
-  </svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120" width="48" height="48" fill="white">
+  <path d="M50.5,0 C60,20 45,30 45,45 C45,50 50,55 55,60 C60,65 65,70 65,80 C65,90 60,100 50,100 C40,100 30,90 30,75 C30,60 45,45 30,25 C15,40 5,60 5,80 C5,102 23,120 50,120 C77,120 95,102 95,80 C95,45 70,25 50.5,0 Z"/>
+</svg>
 );
 
 export const PassKeyIcon = (props) => (

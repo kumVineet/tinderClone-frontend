@@ -24,7 +24,7 @@ export default function HomePage() {
                     setLoading(false)
                 })
                 .catch((err) => {
-                    if (err?.response?.status === 401) {
+                    if (err?.response?.status === 401 || err?.response?.status === 400) {
                         router.push('/login')
                     }
                     setLoading(false)

@@ -54,7 +54,7 @@ const Login = () => {
     if (validate()) {
       try {
         const res = await axios.post(
-          `${BASE_URL}/login`,
+          `${BASE_URL}/api/dev/auth/login`,
           { email: emailId, password },
           { withCredentials: true }
         );
@@ -70,7 +70,7 @@ const Login = () => {
     if (validate()) {
       try {
         const res = await axios.post(
-          `${BASE_URL}/signup`,
+          `${BASE_URL}/api/dev/auth/signup`,
           { firstName, lastName, email: emailId, password },
           { withCredentials: true }
         );
