@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import UserCard from '../components/UserCard';
 
 const Feed = () => {
-  const feed = useSelector((store) => store.feed);
+  const feed = useSelector((store: any) => store.feed);
   const dispatch = useDispatch();
 
   const getFeed = async () => {
