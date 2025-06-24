@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import { addUser } from '../features/user/userSlice'
-import { BASE_URL } from '../utils/constants'
+import { BASE_URL } from '../constants/ApiConstant'
 import Feed from '../screens/Feed'
 import { RootState } from '../store/store'
 
@@ -24,7 +24,7 @@ export default function HomePage() {
                     setLoading(false)
                 })
                 .catch((err) => {
-                    if (err?.response?.status === 401) {
+                    if (err?.response?.status === 401 || err?.response?.status === 400) {
                         router.push('/login')
                     }
                     setLoading(false)

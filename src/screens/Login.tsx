@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { addUser } from '../features/user/userSlice';
 import { useRouter } from 'next/navigation';
-import { BASE_URL } from '../utils/constants';
+import { BASE_URL } from '../constants/ApiConstant';
 import {
   PassKeyIcon,
   UserIcon,
@@ -225,7 +225,7 @@ const Login = () => {
     if (validate()) {
       try {
         const res = await axios.post(
-          `${BASE_URL}/login`,
+          `${BASE_URL}/api/dev/auth/login`,
           { email: formfields.email, password: formfields.password },
           { withCredentials: true }
         );
@@ -241,7 +241,7 @@ const Login = () => {
     if (validate()) {
       try {
         const res = await axios.post(
-          `${BASE_URL}/signup`,
+          `${BASE_URL}/api/dev/auth/signup`,
           { formfields },
           { withCredentials: true }
         );

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import { addUser } from '../../features/user/userSlice'
-import { BASE_URL } from '../../utils/constants'
+import { BASE_URL } from '../../constants/ApiConstant'
 import Requests from '../../screens/Requests'
 
 export default function RequestsPage() {

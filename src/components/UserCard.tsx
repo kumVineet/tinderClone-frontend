@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BASE_URL } from '../utils/constants';
+import { BASE_URL } from '../constants/ApiConstant';
 import { useDispatch } from 'react-redux';
 import { removeUserFromFeed } from '../features/feed/feedSlice';
 
@@ -12,7 +12,8 @@ interface User {
   gender?: string;
   about?: string;
 }
-const UserCard = ( { user }: { user: User } ) => {
+
+const UserCard = ({ user }: { user: User }) => {
   const { _id, firstName, lastName, photo, age, gender, about } = user;
   const dispatch = useDispatch();
 
