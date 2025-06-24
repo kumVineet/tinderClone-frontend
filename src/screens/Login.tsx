@@ -12,7 +12,7 @@ import {
   EyeIcon,
   EyeOffIcon,
 } from '../assets/icons/Icons';
-import { loginUser } from '../services/apiServices';
+import { loginUser, signupUser } from '../services/apiServices';
 // import heic2any from 'heic2any';
 
 type Errors = {
@@ -237,11 +237,7 @@ const Login = () => {
   const handleSignUp = async () => {
     if (validate()) {
       try {
-        const res = await axios.post(
-          `${BASE_URL}/api/dev/auth/signup`,
-          { formfields },
-          { withCredentials: true }
-        );
+        const res: any = await signupUser({formfields})
         dispatch(addUser(res.data));
         router.push('/profile');
       } catch (err: any) {
