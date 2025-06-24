@@ -17,13 +17,12 @@ const NavBar = () => {
     if (!user) return;
     try {
       await axios.post(BASE_URL + '/logout', {}, { withCredentials: true });
-      dispatch(removeUser());
+      dispatch(removeUser(''));
       router.push('/login');
     } catch (err) {
       console.error(err);
     }
   };
-  console.log('user===>', user);
   return (
     <div className="navbar bg-base-100 shadow-sm">
       <div className="flex-1">
