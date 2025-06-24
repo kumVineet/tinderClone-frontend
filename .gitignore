@@ -1,1 +1,46 @@
-node_modules/**/*
+# Node modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build output
+.next/
+out/
+dist/
+build/
+
+# Local env files
+.env
+.env.*.local
+.env.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE/editor folders
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Log files
+*.log
+
+# Coverage
+coverage/
+
+# Misc
+*.swp
+*.swo
+
+# Mac system files
+.AppleDouble
+.LSOverride
+
+# Optional: lock files (if you want to ignore them)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
