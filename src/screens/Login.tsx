@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { addUser } from '../features/user/userSlice';
 import { useRouter } from 'next/navigation';
-import { BASE_URL } from '../utils/constants';
+import { BASE_URL } from '../constants/ApiConstant';
 import {
   PassKeyIcon,
   UserIcon,

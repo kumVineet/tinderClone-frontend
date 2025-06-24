@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BASE_URL } from '../utils/constants';
+import { BASE_URL } from '../constants/ApiConstant';
 import { useDispatch, useSelector } from 'react-redux';
 import { addRequests, removeRequest } from '../utils/requestSlice';
 import { useEffect, useState } from 'react';
