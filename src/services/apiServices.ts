@@ -1,10 +1,10 @@
 import { AUTH_ENDPOINT } from '../constants/ApiConstant';
-import { http as httpService } from './httpServiceRequest';
+import { httpService  } from './httpServiceRequest';
 
-
-export const loginUser = (payload: {}) =>
+export const loginUserApi = (payload: {}) =>
   httpService.post(`${AUTH_ENDPOINT}/login`, payload);
 
-
-export const signupUser = (payload: {}) =>
+export const signupUserApi = (payload: {}) =>
   httpService.post(`${AUTH_ENDPOINT}/signup`, payload);
+
+export const logoutUserApi = () => httpService.post(`${AUTH_ENDPOINT}/logout`, {});

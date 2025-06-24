@@ -1,18 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { addUser } from '../features/user/userSlice';
 import { useRouter } from 'next/navigation';
-import { BASE_URL } from '../constants/ApiConstant';
 import {
   PassKeyIcon,
   UserIcon,
   EyeIcon,
   EyeOffIcon,
 } from '../assets/icons/Icons';
-import { loginUser, signupUser } from '../services/apiServices';
+import { loginUserApi, signupUserApi } from '../services/apiServices';
 // import heic2any from 'heic2any';
 
 type Errors = {
@@ -225,7 +223,7 @@ const Login = () => {
   const handleLogin = async () => {
     if (validate()) {
       try {
-        const res: any = await loginUser({email: formfields.email, password: formfields.password})
+        const res: any = await loginUserApi({email: formfields.email, password: formfields.password})
         dispatch(addUser(res.data));
         router.push('/');
       } catch (err: any) {
@@ -237,7 +235,7 @@ const Login = () => {
   const handleSignUp = async () => {
     if (validate()) {
       try {
-        const res: any = await signupUser({formfields})
+        const res: any = await signupUserApi({formfields})
         dispatch(addUser(res.data));
         router.push('/profile');
       } catch (err: any) {
