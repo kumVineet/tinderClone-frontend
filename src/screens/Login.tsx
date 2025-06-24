@@ -12,7 +12,7 @@ import {
   EyeIcon,
   EyeOffIcon,
 } from '../assets/icons/Icons';
-import heic2any from 'heic2any';
+// import heic2any from 'heic2any';
 
 type Errors = {
   email?: string;
@@ -168,6 +168,7 @@ const Login = () => {
     } else if (file.type === 'image/heic' || file.name.endsWith('.heic')) {
       // allowing .heic images
       try {
+        const heic2any = (await import('heic2any')).default;
         const convertedBlob = await heic2any({
           blob: file,
           toType: 'image/jpeg',

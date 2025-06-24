@@ -11,7 +11,7 @@ import Login from '../../screens/Login'
 export default function LoginPage() {
     const dispatch = useDispatch()
     const router = useRouter()
-    const userData = useSelector((store) => store.user)
+    const userData = useSelector((store: any) => store.user)
 
     const fetchUser = async () => {
         if (userData) return
@@ -20,7 +20,7 @@ export default function LoginPage() {
                 withCredentials: true,
             })
             dispatch(addUser(res.data))
-        } catch (err) {
+        } catch (err: any) {
             if (err.status === 401) {
                 // User is not authenticated, stay on login page
                 return

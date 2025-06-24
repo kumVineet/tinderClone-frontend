@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const LogoIcon = (props) => (
+export const LogoIcon = (props: any) => (
   <svg
     viewBox="0 0 48 48"
     width="48"
@@ -20,7 +20,7 @@ export const LogoIcon = (props) => (
   </svg>
 );
 
-export const PassKeyIcon = (props) => (
+export const PassKeyIcon = (props: any) => (
   <svg
     className="h-[1em] opacity-50"
     xmlns="http://www.w3.org/2000/svg"
@@ -39,7 +39,7 @@ export const PassKeyIcon = (props) => (
   </svg>
 );
 
-export const UserIcon = (props) => (
+export const UserIcon = (props: any) => (
   <svg
     className="h-[1em] opacity-50"
     xmlns="http://www.w3.org/2000/svg"
@@ -58,7 +58,7 @@ export const UserIcon = (props) => (
   </svg>
 );
 
-export const EyeIcon = (props) => (
+export const EyeIcon = (props: any) => (
   <svg
     className={`w-5 h-5 ${props.className || ''}`}
     fill="none"
@@ -81,7 +81,7 @@ export const EyeIcon = (props) => (
   </svg>
 );
 
-export const EyeOffIcon = (props) => (
+export const EyeOffIcon = (props: any) => (
   <svg
     className={`w-5 h-5 ${props.className || ''}`}
     fill="none"
