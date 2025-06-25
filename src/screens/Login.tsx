@@ -12,6 +12,7 @@ import {
 } from '../assets/icons/Icons';
 import { loginUserApi, signupUserApi } from '../services/apiServices';
 import { capitalizeFirstLetter } from '../utils/helper';
+import { useGlobalContext } from '../context/Global.context';
 // import heic2any from 'heic2any';
 
 type Errors = {
@@ -34,7 +35,13 @@ type hobbyOptions = {
   value: string;
 };
 
-const EmailField: FC<{ formfields: any, setFormFields: any, error: any, setError: any, width: string, }> = ({ formfields, setFormFields, error, setError, width }) => (
+const EmailField: FC<{
+  formfields: any;
+  setFormFields: any;
+  error: any;
+  setError: any;
+  width: string;
+}> = ({ formfields, setFormFields, error, setError, width }) => (
   <div className="mb-2 mt-4">
     <label htmlFor="email" className="block text-sm font-medium mb-1">
       Email
@@ -55,18 +62,17 @@ const EmailField: FC<{ formfields: any, setFormFields: any, error: any, setError
           }));
         }}
         className={`border px-3 py-2 pl-10 rounded w-${width}`}
-      // style={{ width: !isLoginForm ? '300px' : '100%' }}
+        // style={{ width: !isLoginForm ? '300px' : '100%' }}
       />
     </div>
-    {error.email && (
-      <p className="text-red-500 text-sm mt-1">{error.email}</p>
-    )}
+    {error.email && <p className="text-red-500 text-sm mt-1">{error.email}</p>}
   </div>
 );
 
 const Login = () => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const { startLoader, stopLoader } = useGlobalContext();
 
   const genderOptions = [
     { label: 'Man', value: 'male' },
@@ -203,7 +209,7 @@ const Login = () => {
         const imageUrl = URL.createObjectURL(convertedBlob as Blob);
         setFormFields((prev) => ({
           ...prev,
-          imageUrls: [...prev.imageUrls, imageUrl]
+          imageUrls: [...prev.imageUrls, imageUrl],
         }));
       } catch (error) {
         alert('Failed to convert HEIC file.');
@@ -256,7 +262,8 @@ const Login = () => {
   };
 
   const handleLogin = async () => {
-    if (validate()) {
+    if (!validate()) {
+      startLoader();
       try {
         const res: any = await loginUserApi({
           email: formfields.email,
@@ -264,8 +271,10 @@ const Login = () => {
         });
         dispatch(addUser(res.data));
         router.push('/');
+        stopLoader();
       } catch (err: any) {
         setGeneralError(err?.response?.data?.message || 'Something went wrong');
+        stopLoader();
       }
     }
   };
@@ -284,7 +293,10 @@ const Login = () => {
 
   return (
     <div className="flex justify-center my-10 gap-20">
-      <div className="card bg-base-300 w-96 shadow-xl" style={{ width: (!isLoginForm) ? '80%' : '384px' }}>
+      <div
+        className="card bg-base-300 w-96 shadow-xl"
+        style={{ width: !isLoginForm ? '80%' : '384px' }}
+      >
         <div className="card-body">
           <h2 className="card-title justify-center">
             {isLoginForm ? 'Login' : 'Profile'}
@@ -347,15 +359,24 @@ const Login = () => {
 
             {/* Email */}
             {!isLoginForm && (
-              <EmailField formfields={formfields} setFormFields={setFormFields} error={error} setError={setError} width="75"
+              <EmailField
+                formfields={formfields}
+                setFormFields={setFormFields}
+                error={error}
+                setError={setError}
+                width="75"
               />
             )}
           </div>
 
-
           {/* Email */}
           {isLoginForm && (
-            <EmailField formfields={formfields} setFormFields={setFormFields} error={error} setError={setError} width="full"
+            <EmailField
+              formfields={formfields}
+              setFormFields={setFormFields}
+              error={error}
+              setError={setError}
+              width="full"
             />
           )}
 
@@ -682,7 +703,9 @@ const Login = () => {
                     {
                       <div className="text-center text-gray-500">
                         <p className="text-sm">Click or drag an image here</p>
-                        <p className="text-xs mt-1">JPG, PNG, or GIF (max 2MB)</p>
+                        <p className="text-xs mt-1">
+                          JPG, PNG, or GIF (max 2MB)
+                        </p>
                       </div>
                     }
                     <input
@@ -705,7 +728,9 @@ const Login = () => {
                 ))}
               </div>
               {error.image && formfields.imageUrls.length < 4 && (
-                <p className="text-red-500 flex justify-center text-sm mt-1">{error.image}</p>
+                <p className="text-red-500 flex justify-center text-sm mt-1">
+                  {error.image}
+                </p>
               )}
             </div>
           </>
