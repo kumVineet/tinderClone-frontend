@@ -7,6 +7,7 @@ import axios from 'axios';
 import { BASE_URL } from '../constants/ApiConstant';
 import { removeUser } from '../features/user/userSlice';
 import { useSelector, useDispatch } from 'react-redux';
+import { logoutUserApi } from '../services/apiServices';
 
 const NavBar = () => {
   const user = useSelector((store:any) => store.user);
@@ -16,7 +17,7 @@ const NavBar = () => {
   const handleLogout = async () => {
     if (!user) return;
     try {
-      await axios.post(BASE_URL + '/logout', {}, { withCredentials: true });
+      await logoutUserApi();
       dispatch(removeUser(''));
       router.push('/login');
     } catch (err) {

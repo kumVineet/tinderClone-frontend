@@ -30,7 +30,7 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-export const http = {
+export const httpService = {
   get: <T>(url: string, config?: AxiosRequestConfig): Promise<T> =>
     axiosInstance.get(url, config).then((res) => res.data),
 

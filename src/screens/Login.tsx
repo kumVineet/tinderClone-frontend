@@ -1,18 +1,17 @@
 'use client';
 
-import { useState } from 'react';
-import axios from 'axios';
+import { FC, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addUser } from '../features/user/userSlice';
 import { useRouter } from 'next/navigation';
-import { BASE_URL } from '../constants/ApiConstant';
 import {
   PassKeyIcon,
   UserIcon,
   EyeIcon,
   EyeOffIcon,
 } from '../assets/icons/Icons';
-import { loginUser, signupUser } from '../services/apiServices';
+import { loginUserApi, signupUserApi } from '../services/apiServices';
+import { capitalizeFirstLetter } from '../utils/helper';
 // import heic2any from 'heic2any';
 
 type Errors = {
@@ -22,6 +21,7 @@ type Errors = {
   lastName?: string;
   about?: string;
   hobbies?: string;
+  image?: string;
 };
 
 type LookingForOptions = {
@@ -33,6 +33,36 @@ type hobbyOptions = {
   label: string;
   value: string;
 };
+
+const EmailField: FC<{ formfields: any, setFormFields: any, error: any, setError: any, width: string, }> = ({ formfields, setFormFields, error, setError, width }) => (
+  <div className="mb-2 mt-4">
+    <label htmlFor="email" className="block text-sm font-medium mb-1">
+      Email
+    </label>
+    <div className="relative">
+      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+        <UserIcon />
+      </span>
+      <input
+        type="email"
+        id="email"
+        value={formfields.email}
+        onChange={(e) => {
+          setError((prev: any) => ({ ...prev, email: '' }));
+          setFormFields((prev: any) => ({
+            ...prev,
+            email: e.target.value,
+          }));
+        }}
+        className={`border px-3 py-2 pl-10 rounded w-${width}`}
+      // style={{ width: !isLoginForm ? '300px' : '100%' }}
+      />
+    </div>
+    {error.email && (
+      <p className="text-red-500 text-sm mt-1">{error.email}</p>
+    )}
+  </div>
+);
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -56,7 +86,7 @@ const Login = () => {
     { label: 'Not-decided', value: 'not-decided' },
   ];
 
-  let hobbyOptions: hobbyOptions[] = [
+  const [hobbyOptions, setHobbyOptions] = useState<hobbyOptions[]>([
     { label: 'Travel', value: 'travel' },
     { label: 'Movies', value: 'movies' },
     { label: 'Shopping', value: 'shopping' },
@@ -66,16 +96,17 @@ const Login = () => {
     { label: 'Cooking', value: 'cooking' },
     { label: 'Music', value: 'music' },
     { label: 'Dance', value: 'dance' },
-    { label: 'Cafe-hopping', value: 'cafe-hopping' },
+    { label: 'Cafe Hopping', value: 'cafe hopping' },
     { label: 'Football', value: 'football' },
     { label: 'Cricket', value: 'cricket' },
-    { label: 'Content-creator', value: 'content-creator' },
+    { label: 'Content Creator', value: 'content creator' },
     { label: 'Gardening', value: 'gardening' },
     { label: 'Badminton', value: 'badminton' },
     { label: 'Swimming', value: 'swimming' },
     { label: 'Gym', value: 'gym' },
-    { label: '+More', value: 'others' },
-  ];
+  ]);
+
+  // const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   const [formfields, setFormFields] = useState<{
     firstName: string;
@@ -88,10 +119,7 @@ const Login = () => {
     gender: string;
     interest: string;
     lookingFor: string[];
-    photo1: string;
-    photo2: string;
-    photo3: string;
-    photo4: string;
+    imageUrls: string[];
     hobbies: string[];
     about: string;
   }>({
@@ -105,10 +133,7 @@ const Login = () => {
     gender: '',
     interest: '',
     lookingFor: [],
-    photo1: '',
-    photo2: '',
-    photo3: '',
-    photo4: '',
+    imageUrls: [],
     hobbies: [],
     about: '',
   });
@@ -118,6 +143,7 @@ const Login = () => {
   const [isLoginForm, setIsLoginForm] = useState(true);
   const [generalError, setGeneralError] = useState('');
   const [error, setError] = useState<Errors>({});
+  const [showField, setShowField] = useState(false);
 
   const toggleLookingFor = (value: string) => {
     setFormFields((prev) => ({
@@ -128,7 +154,27 @@ const Login = () => {
     }));
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      hobbyOptions.push({
+        label: capitalizeFirstLetter(otherHobbies.trim()),
+        value: otherHobbies.trim().toLowerCase(),
+      });
+      setFormFields((prev) => ({
+        ...prev,
+        hobbies: [
+          ...prev.hobbies.filter(
+            (item) => item !== otherHobbies.trim().toLowerCase()
+          ),
+          otherHobbies.trim().toLowerCase(),
+        ],
+      }));
+      setOtherHobbies('');
+    }
+  };
+
   const toggleHobbies = (value: string) => {
+    setError((prev) => ({ ...prev, hobbies: '' }));
     setFormFields((prev) => ({
       ...prev,
       hobbies: prev.hobbies.includes(value)
@@ -137,30 +183,10 @@ const Login = () => {
     }));
   };
 
-  const updatehobbies = (value: string) => {
-    setOtherHobbies(value);
-    if (value.charAt(value.length - 1) === ' ') {
-      hobbyOptions = [
-        {
-          label: otherHobbies.trim(),
-          value: otherHobbies.trim().toLowerCase(),
-        },
-        ...hobbyOptions,
-      ];
-      setFormFields((prev) => ({
-        ...prev,
-        hobbies: [
-          otherHobbies.trim().toLowerCase(),
-          ...prev.hobbies.filter((item) => item !== 'others'),
-        ],
-      }));
-      setOtherHobbies('');
-    }
-  };
-
   // const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    setError((prev) => ({ ...prev, image: '' }));
     const file = e.target.files?.[0];
 
     if (!file) {
@@ -175,19 +201,24 @@ const Login = () => {
           toType: 'image/jpeg',
         });
         const imageUrl = URL.createObjectURL(convertedBlob as Blob);
-        setFormFields((prev) => ({ ...prev, photo1: imageUrl }));
+        setFormFields((prev) => ({
+          ...prev,
+          imageUrls: [...prev.imageUrls, imageUrl]
+        }));
       } catch (error) {
         alert('Failed to convert HEIC file.');
-        console.error(error);
         return;
       }
     } else if (!file.type.startsWith('image/')) {
       alert('Please select a valid image file (JPG, PNG, GIF)');
     } else if (file.size > 5 * 1024 * 1024) {
-      alert("File size must be under 5MB");
+      alert('File size must be under 5MB');
       return;
     } else {
-      setFormFields((prev) => ({ ...prev, photo1: URL.createObjectURL(file) }));
+      setFormFields((prev) => ({
+        ...prev,
+        imageUrls: [...prev.imageUrls, URL.createObjectURL(file)],
+      }));
       return;
     }
   };
@@ -216,8 +247,10 @@ const Login = () => {
       if (!formfields.hobbies.length) {
         newErrors.hobbies = 'Please add at least one hobby';
       }
+      if (!formfields.imageUrls.length) {
+        newErrors.image = 'Please upload at least one image';
+      }
     }
-
     setError(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -225,7 +258,10 @@ const Login = () => {
   const handleLogin = async () => {
     if (validate()) {
       try {
-        const res: any = await loginUser({email: formfields.email, password: formfields.password})
+        const res: any = await loginUserApi({
+          email: formfields.email,
+          password: formfields.password,
+        });
         dispatch(addUser(res.data));
         router.push('/');
       } catch (err: any) {
@@ -235,9 +271,9 @@ const Login = () => {
   };
 
   const handleSignUp = async () => {
-    if (validate()) {
+    if (!validate()) {
       try {
-        const res: any = await signupUser({formfields})
+        const res: any = await signupUserApi({ formfields });
         dispatch(addUser(res.data));
         router.push('/profile');
       } catch (err: any) {
@@ -248,16 +284,15 @@ const Login = () => {
 
   return (
     <div className="flex justify-center my-10 gap-20">
-      <div className="card bg-base-300 w-96 shadow-xl">
+      <div className="card bg-base-300 w-96 shadow-xl" style={{ width: (!isLoginForm) ? '80%' : '384px' }}>
         <div className="card-body">
           <h2 className="card-title justify-center">
-            {isLoginForm ? 'Login' : 'Sign Up'}
+            {isLoginForm ? 'Login' : 'Profile'}
           </h2>
 
-          {/* Name */}
-          {!isLoginForm && (
-            <div className="flex justify-between">
-              {/* FirstNamne */}
+          <div className="flex justify-between">
+            {/* FirstName */}
+            {!isLoginForm && (
               <div className="mb-2 mt-4">
                 <label
                   htmlFor="firstName"
@@ -268,8 +303,9 @@ const Login = () => {
                 <input
                   type="text"
                   value={formfields.firstName}
-                  className="w-40 border px-3 py-2 rounded"
+                  className="w-75 border px-3 py-2 rounded"
                   onChange={(e) => {
+                    setError((prev) => ({ ...prev, firstName: '' }));
                     setFormFields((prev) => ({
                       ...prev,
                       firstName: e.target.value,
@@ -280,8 +316,10 @@ const Login = () => {
                   <p className="text-red-500 text-sm mt-1">{error.firstName}</p>
                 )}
               </div>
+            )}
 
-              {/* LatName */}
+            {/* LastName */}
+            {!isLoginForm && (
               <div className="mb-2 mt-4">
                 <label
                   htmlFor="lastName"
@@ -292,8 +330,9 @@ const Login = () => {
                 <input
                   type="text"
                   value={formfields.lastName}
-                  className="w-40 border px-3 py-2 rounded"
+                  className="w-75 border px-3 py-2 rounded"
                   onChange={(e) => {
+                    setError((prev) => ({ ...prev, lastName: '' }));
                     setFormFields((prev) => ({
                       ...prev,
                       lastName: e.target.value,
@@ -304,35 +343,21 @@ const Login = () => {
                   <p className="text-red-500 text-sm mt-1">{error.lastName}</p>
                 )}
               </div>
-            </div>
-          )}
+            )}
 
-          {/* Email */}
-          <div className="mb-4 mt-2">
-            <label htmlFor="email" className="block text-sm font-medium mb-1">
-              Email
-            </label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-                <UserIcon />
-              </span>
-              <input
-                type="email"
-                id="email"
-                value={formfields.email}
-                onChange={(e) => {
-                  setFormFields((prev) => ({
-                    ...prev,
-                    email: e.target.value,
-                  }));
-                }}
-                className="w-full border px-3 py-2 pl-10 rounded"
+            {/* Email */}
+            {!isLoginForm && (
+              <EmailField formfields={formfields} setFormFields={setFormFields} error={error} setError={setError} width="75"
               />
-            </div>
-            {error.email && (
-              <p className="text-red-500 text-sm mt-1">{error.email}</p>
             )}
           </div>
+
+
+          {/* Email */}
+          {isLoginForm && (
+            <EmailField formfields={formfields} setFormFields={setFormFields} error={error} setError={setError} width="full"
+            />
+          )}
 
           {!isLoginForm && (
             <>
@@ -510,6 +535,7 @@ const Login = () => {
                   id="about"
                   value={formfields.about}
                   onChange={(e) => {
+                    setError((prev) => ({ ...prev, about: '' }));
                     setFormFields((prev) => ({
                       ...prev,
                       about: e.target.value,
@@ -547,11 +573,25 @@ const Login = () => {
                       {option.label}
                     </button>
                   ))}
+                  <button
+                    type="button"
+                    className={
+                      'px-8 py-2 rounded-full border-2 font-bold transition-all'
+                    }
+                    style={{
+                      borderColor: showField ? '#f87171' : '#ffffff',
+                      outline: 'none',
+                      boxShadow: 'none',
+                    }}
+                    onClick={() => setShowField(!showField)}
+                  >
+                    {!showField ? '+ More' : '- Less'}
+                  </button>
                   {error.hobbies && (
                     <p className="text-red-500 text-sm mt-1">{error.hobbies}</p>
                   )}
                 </div>
-                {formfields.hobbies.includes('others') && (
+                {showField && (
                   <>
                     <br />
                     <input
@@ -559,7 +599,8 @@ const Login = () => {
                       type="text"
                       value={otherHobbies}
                       placeholder="hit space after adding each hobby"
-                      onChange={(e) => updatehobbies(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      onChange={(e) => setOtherHobbies(e.target.value)}
                     />
                   </>
                 )}
@@ -583,6 +624,7 @@ const Login = () => {
                 id="password"
                 value={formfields.password}
                 onChange={(e) => {
+                  setError((prev) => ({ ...prev, password: '' }));
                   setFormFields((prev) => ({
                     ...prev,
                     password: e.target.value,
@@ -626,35 +668,48 @@ const Login = () => {
               : 'Existing User? Login here'}
           </p>
         </div>
-      </div>
-      {/* Images */}
-      <div className="card bg-base-300 w-96 shadow-xl">
-          <div className="card-body">
-            <label
-              htmlFor="image-upload"
-              className="w-2/5 h-48 border-2 border-dashed border-gray-300 rounded-2xl flex items-center justify-center cursor-pointer hover:border-blue-400 transition"
-            >
-              {formfields.photo1 ? (
-                <img
-                  src={formfields.photo1}
-                  alt="Preview"
-                  className="h-full w-full object-cover rounded-2xl"
-                />
-              ) : (
-                <div className="text-center text-gray-500">
-                  <p className="text-sm">Click or drag an image here</p>
-                  <p className="text-xs mt-1">JPG, PNG, or GIF (max 2MB)</p>
-                </div>
+        {/* Images */}
+        {!isLoginForm && (
+          <>
+            <h2 className="mt-6 card-title justify-center">Profile Images</h2>
+            <div className="card-body">
+              <div className="flex justify-center w-full">
+                {formfields.imageUrls.length < 4 && (
+                  <label
+                    htmlFor="image-upload"
+                    className="w-2/5 h-48 border-2 border-dashed border-gray-300 rounded-2xl flex items-center justify-center cursor-pointer hover:border-blue-400 transition"
+                  >
+                    {
+                      <div className="text-center text-gray-500">
+                        <p className="text-sm">Click or drag an image here</p>
+                        <p className="text-xs mt-1">JPG, PNG, or GIF (max 2MB)</p>
+                      </div>
+                    }
+                    <input
+                      id="image-upload"
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleImageChange}
+                    />
+                  </label>
+                )}
+              </div>
+              <div className="flex justify-center flex-wrap gap-4">
+                {formfields.imageUrls.map((url) => (
+                  <img
+                    src={url}
+                    alt="Preview"
+                    className="h-48 w-2/5 border-gray-300 border-2 object-cover rounded-2xl"
+                  />
+                ))}
+              </div>
+              {error.image && formfields.imageUrls.length < 4 && (
+                <p className="text-red-500 flex justify-center text-sm mt-1">{error.image}</p>
               )}
-              <input
-                id="image-upload"
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleImageChange}
-              />
-            </label>
-          </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
