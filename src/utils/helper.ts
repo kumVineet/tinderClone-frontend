@@ -7,3 +7,6 @@ export function capitalizeFirstLetter(text: string): string {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(' ');
 }
+
+export const isNotNullAndUndefined = <T>(value: T | null | undefined): value is T =>
+  value !== null && value !== undefined;
