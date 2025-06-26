@@ -11,9 +11,10 @@ import {
   EyeOffIcon,
 } from '../assets/icons/Icons';
 import { loginUserApi, signupUserApi } from '../services/apiServices';
-import { capitalizeFirstLetter } from '../utils/helper';
+import { capitalizeFirstLetter, customConsole } from '../utils/helper';
 import { useGlobalContext } from '../context/Global.context';
-// import heic2any from 'heic2any';
+import { ClientPageRoot } from 'next/dist/client/components/client-page';
+import CustomImage from '../components/CustomImage.component';
 
 type Errors = {
   email?: string;
@@ -62,7 +63,7 @@ const EmailField: FC<{
           }));
         }}
         className={`border px-3 py-2 pl-10 rounded w-${width}`}
-        // style={{ width: !isLoginForm ? '300px' : '100%' }}
+      // style={{ width: !isLoginForm ? '300px' : '100%' }}
       />
     </div>
     {error.email && <p className="text-red-500 text-sm mt-1">{error.email}</p>}
@@ -111,8 +112,6 @@ const Login = () => {
     { label: 'Swimming', value: 'swimming' },
     { label: 'Gym', value: 'gym' },
   ]);
-
-  // const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   const [formfields, setFormFields] = useState<{
     firstName: string;
@@ -189,8 +188,6 @@ const Login = () => {
     }));
   };
 
-  // const [imagePreview, setImagePreview] = useState<string | null>(null);
-
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setError((prev) => ({ ...prev, image: '' }));
     const file = e.target.files?.[0];
@@ -199,6 +196,7 @@ const Login = () => {
       alert('Please select a valid image file (JPG, PNG, GIF)');
       return;
     } else if (file.type === 'image/heic' || file.name.endsWith('.heic')) {
+      startLoader();
       // allowing .heic images
       try {
         const heic2any = (await import('heic2any')).default;
@@ -211,8 +209,11 @@ const Login = () => {
           ...prev,
           imageUrls: [...prev.imageUrls, imageUrl],
         }));
+        stopLoader();
+        return;
       } catch (error) {
         alert('Failed to convert HEIC file.');
+        stopLoader();
         return;
       }
     } else if (!file.type.startsWith('image/')) {
@@ -221,10 +222,12 @@ const Login = () => {
       alert('File size must be under 5MB');
       return;
     } else {
+      startLoader();
       setFormFields((prev) => ({
         ...prev,
         imageUrls: [...prev.imageUrls, URL.createObjectURL(file)],
       }));
+      stopLoader();
       return;
     }
   };
@@ -281,12 +284,15 @@ const Login = () => {
 
   const handleSignUp = async () => {
     if (!validate()) {
+      startLoader();
       try {
         const res: any = await signupUserApi({ formfields });
         dispatch(addUser(res.data));
         router.push('/profile');
+        stopLoader();
       } catch (err: any) {
         setGeneralError(err?.response?.data?.message || 'Something went wrong');
+        stopLoader();
       }
     }
   };
@@ -693,18 +699,43 @@ const Login = () => {
         {!isLoginForm && (
           <>
             <h2 className="mt-6 card-title justify-center">Profile Images</h2>
-            <div className="card-body">
-              <div className="flex justify-center w-full">
+            <div className="card-body flex flex-row justify-center gap-4 w-full">
+              {formfields.imageUrls.map((url, index) => (
+                <>
+                  <img
+                    key={index}
+                    src={url}
+                    alt="Preview"
+                    className="h-96 w-1/5 border-gray-300 border-2 object-cover rounded-2xl"
+                  />
+                  <span
+                    className="badge relative right-[50px] top-[5px] w-8 h-8 bg-red-600 rounded-full hover:cursor-pointer"
+                    onClick={() =>
+                      setFormFields((prev) => ({
+                        ...prev,
+                        imageUrls: prev.imageUrls.filter(
+                          (img) => prev.imageUrls.indexOf(img) !== index
+                        ),
+                      }))
+                    }
+                  >
+                    <CustomImage name="deleteIcon" className="w-[10px] h-[10px]" />
+                  </span>
+                </>
+              ))}
+              <div
+                className={`${formfields.imageUrls.length < 4 ? 'w-1/5' : ''}`}
+              >
                 {formfields.imageUrls.length < 4 && (
                   <label
                     htmlFor="image-upload"
-                    className="w-2/5 h-48 border-2 border-dashed border-gray-300 rounded-2xl flex items-center justify-center cursor-pointer hover:border-blue-400 transition"
+                    className=" h-96 border-2 border-dashed border-gray-300 rounded-2xl flex items-center justify-center cursor-pointer hover:border-blue-400 transition"
                   >
                     {
                       <div className="text-center text-gray-500">
                         <p className="text-sm">Click or drag an image here</p>
                         <p className="text-xs mt-1">
-                          JPG, PNG, or GIF (max 2MB)
+                          JPG, PNG, or GIF (max 5MB)
                         </p>
                       </div>
                     }
@@ -717,15 +748,6 @@ const Login = () => {
                     />
                   </label>
                 )}
-              </div>
-              <div className="flex justify-center flex-wrap gap-4">
-                {formfields.imageUrls.map((url) => (
-                  <img
-                    src={url}
-                    alt="Preview"
-                    className="h-48 w-2/5 border-gray-300 border-2 object-cover rounded-2xl"
-                  />
-                ))}
               </div>
               {error.image && formfields.imageUrls.length < 4 && (
                 <p className="text-red-500 flex justify-center text-sm mt-1">

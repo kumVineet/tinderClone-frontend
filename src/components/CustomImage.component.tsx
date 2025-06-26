@@ -9,7 +9,7 @@ interface ImageData {
   [key: string]: { src: string; alt: string };
 }
 const CustomImage: React.FC<ImageProps> = ({ name = '', ...props }) => {
-  const images: ImageData = RP_IMAGES;
+  const images: ImageData = IMAGES;
 
   const imageSrc = name && images[name]?.src ? images[name]?.src : props.src;
   const imageAlt = name && images[name]?.alt ? images[name]?.alt : props.alt;
@@ -25,7 +25,7 @@ const CustomImage: React.FC<ImageProps> = ({ name = '', ...props }) => {
 
 export default CustomImage;
 
-const RP_IMAGES: ImageData = {
+const IMAGES: ImageData = {
   bouncingCircles: {
     src: '/images/loaders/bouncing-circles.svg',
     alt: 'bouncing-circles',
@@ -53,5 +53,9 @@ const RP_IMAGES: ImageData = {
   tubeSpinner: {
     src: '/images/loaders/tube-spinner.svg',
     alt: 'tube-spinner',
+  },
+  deleteIcon: {
+    src: '/images/deleteIcon.svg',
+    alt: 'delete-icon',
   },
 };

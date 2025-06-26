@@ -8,9 +8,11 @@ import { BASE_URL } from '../constants/ApiConstant';
 import { removeUser } from '../features/user/userSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutUserApi } from '../services/apiServices';
+import { customConsole } from '../utils/helper';
+import CustomImage from './CustomImage.component';
 
 const NavBar = () => {
-  const user = useSelector((store:any) => store.user);
+  const user = useSelector((store: any) => store.user);
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -42,9 +44,9 @@ const NavBar = () => {
               className="btn btn-ghost btn-circle avatar"
             >
               <div className="w-10 rounded-full">
-                <img
+                <CustomImage
                   alt="profile_image_alt"
-                  src={user !== null ? user?.photo : ''}
+                  src={user.photo1}
                 />
               </div>
             </div>

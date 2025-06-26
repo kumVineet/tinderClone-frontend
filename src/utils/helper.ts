@@ -8,5 +8,13 @@ export function capitalizeFirstLetter(text: string): string {
     .join(' ');
 }
 
-export const isNotNullAndUndefined = <T>(value: T | null | undefined): value is T =>
-  value !== null && value !== undefined;
+export const isNotNullAndUndefined = <T>(
+  value: T | null | undefined
+): value is T => value !== null && value !== undefined;
+
+export const customConsole = (...message: any[]) => {
+  const environment = process.env.NODE_ENV;
+  if (environment === 'development') {
+    console.log(...message);
+  }
+};
