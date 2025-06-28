@@ -70,6 +70,51 @@ const EmailField: FC<{
   </div>
 );
 
+const Password: FC<{
+  formfields: any;
+  setFormFields: any;
+  showPassword: boolean;
+  setShowPassword: any;
+  error: any;
+  setError: any;
+}> = ({ formfields, setFormFields, showPassword, setShowPassword, error, setError }) => (
+  <div className="mb-6 w-full">
+    <label
+      htmlFor="password"
+      className="block text-sm font-medium mb-1"
+    >
+      Password
+    </label>
+    <div className="relative">
+      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+        <PassKeyIcon />
+      </span>
+      <input
+        type={showPassword ? 'text' : 'password'}
+        id="password"
+        value={formfields.password}
+        onChange={(e) => {
+          setError((prev: any) => ({ ...prev, password: '' }));
+          setFormFields((prev: any) => ({
+            ...prev,
+            password: e.target.value,
+          }));
+        }}
+        className="w-full border px-3 py-2 pl-10 rounded"
+      />
+      <span
+        onClick={() => setShowPassword((prev: any) => !prev)}
+        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer"
+      >
+        {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+      </span>
+    </div>
+    {error.password && (
+      <p className="text-red-500 text-sm mt-1">{error.password}</p>
+    )}
+  </div>
+);
+
 const Login = () => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -88,9 +133,9 @@ const Login = () => {
   ];
 
   const lookingForOptions: LookingForOptions[] = [
-    { label: 'Short-term', value: 'short-term' },
-    { label: 'Long-term', value: 'long-term' },
-    { label: 'Not-decided', value: 'not-decided' },
+    { label: 'Short Term', value: 'short-term' },
+    { label: 'Long Term', value: 'long-term' },
+    { label: 'Not Decided', value: 'not-decided' },
   ];
 
   const [hobbyOptions, setHobbyOptions] = useState<hobbyOptions[]>([
@@ -104,10 +149,10 @@ const Login = () => {
     { label: 'Music', value: 'music' },
     { label: 'Dance', value: 'dance' },
     { label: 'Cafe Hopping', value: 'cafe hopping' },
-    { label: 'Football', value: 'football' },
-    { label: 'Cricket', value: 'cricket' },
+    // { label: 'Football', value: 'football' },
+    // { label: 'Cricket', value: 'cricket' },
     { label: 'Content Creator', value: 'content creator' },
-    { label: 'Gardening', value: 'gardening' },
+    // { label: 'Gardening', value: 'gardening' },
     { label: 'Badminton', value: 'badminton' },
     { label: 'Swimming', value: 'swimming' },
     { label: 'Gym', value: 'gym' },
@@ -132,9 +177,9 @@ const Login = () => {
     lastName: '',
     email: '',
     password: '',
-    month: 1,
-    date: 1,
-    year: 1965,
+    month: 0,
+    date: 0,
+    year: 0,
     gender: '',
     interest: '',
     lookingFor: [],
@@ -142,6 +187,8 @@ const Login = () => {
     hobbies: [],
     about: '',
   });
+
+  customConsole('formfields', formfields);
 
   const [otherHobbies, setOtherHobbies] = useState<string>('');
   const [showPassword, setShowPassword] = useState(false);
@@ -363,7 +410,7 @@ const Login = () => {
               </div>
             )}
 
-            {/* Email */}
+            {/* Email on Profile Page */}
             {!isLoginForm && (
               <EmailField
                 formfields={formfields}
@@ -375,7 +422,7 @@ const Login = () => {
             )}
           </div>
 
-          {/* Email */}
+          {/* Email on Login Page */}
           {isLoginForm && (
             <EmailField
               formfields={formfields}
@@ -388,375 +435,365 @@ const Login = () => {
 
           {!isLoginForm && (
             <>
-              {/* Birthday */}
-              <div>
-                <p className="block text-sm font-medium mb-1">Birthday</p>
-                <div className="flex justify-between">
-                  {/* Month */}
-                  <div>
-                    <label
-                      htmlFor="month"
-                      className="block text-sm font-medium mb-1"
-                    >
-                      Month
-                    </label>
-                    <input
-                      type="number"
-                      min="1"
-                      max="12"
-                      value={formfields.month}
-                      className="w-18 border px-3 py-2 rounded text-center"
-                      onChange={(e) => {
-                        setFormFields((prev) => ({
-                          ...prev,
-                          month: Number(e.target.value),
-                        }));
-                      }}
-                    />
+              <div className="flex justify-between mb-2">
+                {/* Birthday */}
+                <div className="w-1/4">
+                  <p className="block text-sm font-medium mb-1">Date of Birth</p>
+                  <div className="flex justify-between">
+                    {/* Month */}
+                    <div>
+                      {/* <label
+                        htmlFor="month"
+                        className="block text-sm font-medium mb-1"
+                      >
+                        Month
+                      </label> */}
+                      <input
+                        type="number"
+                        min="1"
+                        max="12"
+                        // value={formfields.month}
+                        placeholder='MM'
+                        className="w-18 border px-3 py-2 rounded text-center"
+                        onChange={(e) => {
+                          setFormFields((prev) => ({
+                            ...prev,
+                            month: Number(e.target.value),
+                          }));
+                        }}
+                      />
+                    </div>
+                    {/* Date */}
+                    <div>
+                      {/* <label
+                        htmlFor="date"
+                        className="block text-sm font-medium mb-1"
+                      >
+                        Date
+                      </label> */}
+                      <input
+                        type="number"
+                        min="1"
+                        max="31"
+                        // value={formfields.date}
+                        placeholder='DD'
+                        className="w-18 border px-3 py-2 rounded text-center"
+                        onChange={(e) => {
+                          setFormFields((prev) => ({
+                            ...prev,
+                            date: Number(e.target.value),
+                          }));
+                        }}
+                      />
+                    </div>
+                    {/* Year */}
+                    <div>
+                      {/* <label
+                        htmlFor="Year"
+                        className="block text-sm font-medium mb-1"
+                      >
+                        Year
+                      </label> */}
+                      <input
+                        type="number"
+                        min="1965"
+                        // value={formfields.year}
+                        placeholder='YYYY'
+                        className="w-18 border px-3 py-2 rounded text-center"
+                        onChange={(e) => {
+                          setFormFields((prev) => ({
+                            ...prev,
+                            year: Number(e.target.value),
+                          }));
+                        }}
+                      />
+                    </div>
                   </div>
-                  {/* Date */}
-                  <div>
-                    <label
-                      htmlFor="date"
-                      className="block text-sm font-medium mb-1"
-                    >
-                      Date
-                    </label>
-                    <input
-                      type="number"
-                      min="1"
-                      max="31"
-                      value={formfields.date}
-                      className="w-18 border px-3 py-2 rounded text-center"
-                      onChange={(e) => {
-                        setFormFields((prev) => ({
-                          ...prev,
-                          date: Number(e.target.value),
-                        }));
-                      }}
-                    />
+                </div>
+                {/* Gender */}
+                <div className="w-1/4">
+                  <label className="block text-sm font-medium mb-1">Gender</label>
+                  <div className="flex justify-between">
+                    {genderOptions.map((option) => (
+                      <button
+                        key={option.value}
+                        onClick={() => {
+                          setFormFields((prev) => ({
+                            ...prev,
+                            gender: option.value,
+                          }));
+                        }}
+                        className={
+                          'px-8 py-2 rounded-full border-2 font-bold transition-all'
+                        }
+                        style={{
+                          borderColor:
+                            formfields.gender === option.value
+                              ? '#f87171'
+                              : '#ffffff',
+                          outline: 'none',
+                          boxShadow: 'none',
+                        }}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
                   </div>
-                  {/* Year */}
-                  <div>
-                    <label
-                      htmlFor="Year"
-                      className="block text-sm font-medium mb-1"
-                    >
-                      Year
-                    </label>
-                    <input
-                      type="number"
-                      min="1965"
-                      value={formfields.year}
-                      className="w-18 border px-3 py-2 rounded text-center"
-                      onChange={(e) => {
-                        setFormFields((prev) => ({
-                          ...prev,
-                          year: Number(e.target.value),
-                        }));
-                      }}
-                    />
+                </div>
+                {/* Interest */}
+                <div className="w-1/4">
+                  <label className="block text-sm font-medium mb-1">
+                    Interested In
+                  </label>
+                  <div className="flex justify-between">
+                    {interestOptions.map((option) => (
+                      <button
+                        key={option.value}
+                        onClick={() => {
+                          setFormFields((prev) => ({
+                            ...prev,
+                            interest: option.value,
+                          }));
+                        }}
+                        className={
+                          'px-8 py-2 rounded-full border-2 font-bold transition-all'
+                        }
+                        style={{
+                          borderColor:
+                            formfields.interest === option.value
+                              ? '#f87171'
+                              : '#ffffff',
+                          outline: 'none',
+                          boxShadow: 'none',
+                        }}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
                   </div>
                 </div>
               </div>
-              {/* Gender */}
-              <div>
-                <label className="block text-sm font-medium mb-1">Gender</label>
-                <div className="flex justify-between">
-                  {genderOptions.map((option) => (
-                    <button
-                      key={option.value}
-                      onClick={() => {
+              <div className="flex justify-between mb-2">
+                <div className="w-78">
+                  {/* LookingFor */}
+                  <div>
+                    <label className="block text-sm font-medium mb-1">
+                      Looking For
+                    </label>
+                    <div className="flex justify-between gap-1">
+                      {lookingForOptions.map((option) => (
+                        <button
+                          key={option.value}
+                          type="button"
+                          className={
+                            'px-8 py-2 rounded-full border-2 font-bold transition-all'
+                          }
+                          style={{
+                            borderColor: formfields.lookingFor.includes(
+                              option.value
+                            )
+                              ? '#f87171'
+                              : '#ffffff',
+                            outline: 'none',
+                            boxShadow: 'none',
+                          }}
+                          onClick={() => toggleLookingFor(option.value)}
+                        >
+                          {option.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  {/* About */}
+                  <div className='mb-2'>
+                    <label
+                      htmlFor="about"
+                      className="block text-sm font-medium mb-1"
+                    >
+                      About
+                    </label>
+                    <textarea
+                      id="about"
+                      value={formfields.about}
+                      onChange={(e) => {
+                        setError((prev) => ({ ...prev, about: '' }));
                         setFormFields((prev) => ({
                           ...prev,
-                          gender: option.value,
+                          about: e.target.value,
                         }));
                       }}
-                      className={
-                        'px-8 py-2 rounded-full border-2 font-bold transition-all'
-                      }
-                      style={{
-                        borderColor:
-                          formfields.gender === option.value
+                      className="w-full border px-3 py-2 rounded"
+                      rows={3}
+                    />
+                    {error.about && (
+                      <p className="text-red-500 text-sm mt-1">{error.about}</p>
+                    )}
+                  </div>
+                  {/* Password */}
+                  <Password
+                    formfields={formfields}
+                    setFormFields={setFormFields}
+                    showPassword={showPassword}
+                    setShowPassword={setShowPassword}
+                    error={error}
+                    setError={setError}
+                  />
+                </div>
+                {/* Hobbies */}
+                <div className="mb-2 w-78">
+                  <label className="block text-sm font-medium mb-1">
+                    Hobbies
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    {hobbyOptions.map((option) => (
+                      <button
+                        key={option.value}
+                        type="button"
+                        className={
+                          'px-8 py-2 rounded-full border-2 font-bold transition-all'
+                        }
+                        style={{
+                          borderColor: formfields.hobbies.includes(option.value)
                             ? '#f87171'
                             : '#ffffff',
-                        outline: 'none',
-                        boxShadow: 'none',
-                      }}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              {/* Interest */}
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Interested In
-                </label>
-                <div className="flex justify-between">
-                  {interestOptions.map((option) => (
+                          outline: 'none',
+                          boxShadow: 'none',
+                        }}
+                        onClick={() => toggleHobbies(option.value)}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
                     <button
-                      key={option.value}
-                      onClick={() => {
-                        setFormFields((prev) => ({
-                          ...prev,
-                          interest: option.value,
-                        }));
-                      }}
-                      className={
-                        'px-8 py-2 rounded-full border-2 font-bold transition-all'
-                      }
-                      style={{
-                        borderColor:
-                          formfields.interest === option.value
-                            ? '#f87171'
-                            : '#ffffff',
-                        outline: 'none',
-                        boxShadow: 'none',
-                      }}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              {/* LookingFor */}
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Looking For
-                </label>
-                <div className="flex justify-between">
-                  {lookingForOptions.map((option) => (
-                    <button
-                      key={option.value}
                       type="button"
                       className={
                         'px-8 py-2 rounded-full border-2 font-bold transition-all'
                       }
                       style={{
-                        borderColor: formfields.lookingFor.includes(
-                          option.value
-                        )
-                          ? '#f87171'
-                          : '#ffffff',
+                        borderColor: showField ? '#f87171' : '#ffffff',
                         outline: 'none',
                         boxShadow: 'none',
                       }}
-                      onClick={() => toggleLookingFor(option.value)}
+                      onClick={() => setShowField(!showField)}
                     >
-                      {option.label}
+                      {!showField ? '+ More' : '- Less'}
                     </button>
-                  ))}
-                </div>
-              </div>
-              {/* About */}
-              <div>
-                <label
-                  htmlFor="about"
-                  className="block text-sm font-medium mb-1"
-                >
-                  About
-                </label>
-                <textarea
-                  id="about"
-                  value={formfields.about}
-                  onChange={(e) => {
-                    setError((prev) => ({ ...prev, about: '' }));
-                    setFormFields((prev) => ({
-                      ...prev,
-                      about: e.target.value,
-                    }));
-                  }}
-                  className="w-full border px-3 py-2 rounded"
-                  rows={3}
-                />
-                {error.about && (
-                  <p className="text-red-500 text-sm mt-1">{error.about}</p>
-                )}
-              </div>
-              {/* Hobbies */}
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Hobbies
-                </label>
-                <div className="flex flex-wrap gap-2">
-                  {hobbyOptions.map((option) => (
-                    <button
-                      key={option.value}
-                      type="button"
-                      className={
-                        'px-8 py-2 rounded-full border-2 font-bold transition-all'
-                      }
-                      style={{
-                        borderColor: formfields.hobbies.includes(option.value)
-                          ? '#f87171'
-                          : '#ffffff',
-                        outline: 'none',
-                        boxShadow: 'none',
-                      }}
-                      onClick={() => toggleHobbies(option.value)}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                  <button
-                    type="button"
-                    className={
-                      'px-8 py-2 rounded-full border-2 font-bold transition-all'
-                    }
-                    style={{
-                      borderColor: showField ? '#f87171' : '#ffffff',
-                      outline: 'none',
-                      boxShadow: 'none',
-                    }}
-                    onClick={() => setShowField(!showField)}
-                  >
-                    {!showField ? '+ More' : '- Less'}
-                  </button>
-                  {error.hobbies && (
-                    <p className="text-red-500 text-sm mt-1">{error.hobbies}</p>
+                    {error.hobbies && (
+                      <p className="text-red-500 text-sm mt-1">{error.hobbies}</p>
+                    )}
+                  </div>
+                  {showField && (
+                    <>
+                      <br />
+                      <input
+                        className="w-1/3 border px-3 py-2 rounded"
+                        type="text"
+                        value={otherHobbies}
+                        placeholder="Press enter key after adding each hobby"
+                        onKeyDown={handleKeyDown}
+                        onChange={(e) => setOtherHobbies(e.target.value)}
+                      />
+                    </>
                   )}
                 </div>
-                {showField && (
-                  <>
-                    <br />
-                    <input
-                      className="w-full border px-3 py-2 rounded"
-                      type="text"
-                      value={otherHobbies}
-                      placeholder="hit space after adding each hobby"
-                      onKeyDown={handleKeyDown}
-                      onChange={(e) => setOtherHobbies(e.target.value)}
-                    />
-                  </>
+                {/* Images */}
+                {!isLoginForm && (
+                  <div className="w-78">
+                    <h2 className="mt-6 card-title justify-left">Images</h2>
+                    <div className="card-body flex flex-row flex-wrap justify-between w-full gap-auto">
+                      {formfields.imageUrls.map((url, index) => (
+                        <>
+                          <img
+                            key={index}
+                            src={url}
+                            alt="Preview"
+                            className="h-36 w-2/5 border-gray-300 border-2 object-cover rounded-2xl hover:cursor-pointer hover:border-red-600"
+                            onClick={() =>
+                              setFormFields((prev) => ({
+                                ...prev,
+                                imageUrls: prev.imageUrls.filter(
+                                  (img) => prev.imageUrls.indexOf(img) !== index
+                                ),
+                              }))
+                            }
+                          />
+                        </>
+                      ))}
+                      {formfields.imageUrls.length < 4 && (
+                        <div
+                          className={`${formfields.imageUrls.length < 4 ? 'w-2/5' : ''}`}
+                        >
+                          <label
+                            htmlFor="image-upload"
+                            className=" h-36 border-2 border-dashed border-gray-300 rounded-2xl flex items-center justify-center cursor-pointer hover:border-blue-400 transition"
+                          >
+                            {
+                              <div className="text-center text-gray-500">
+                                <p className="text-sm">Click or drag an image here</p>
+                                <p className="text-xs mt-1">
+                                  JPG, PNG, or GIF (max 5MB)
+                                </p>
+                              </div>
+                            }
+                            <input
+                              id="image-upload"
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={handleImageChange}
+                            />
+                          </label>
+                        </div>
+                      )}
+                      {error.image && formfields.imageUrls.length < 4 && (
+                        <p className="text-red-500 flex justify-center text-sm mt-1">
+                          {error.image}
+                        </p>
+                      )}
+                    </div>
+                    {formfields.imageUrls.length > 0 && <p className="text-yellow-400">Click on image to delete it.</p>}
+                  </div>
                 )}
               </div>
             </>
           )}
-          {/* Password */}
-          <div className="mb-6">
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium mb-1"
-            >
-              Password
-            </label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-                <PassKeyIcon />
-              </span>
-              <input
-                type={showPassword ? 'text' : 'password'}
-                id="password"
-                value={formfields.password}
-                onChange={(e) => {
-                  setError((prev) => ({ ...prev, password: '' }));
-                  setFormFields((prev) => ({
-                    ...prev,
-                    password: e.target.value,
-                  }));
-                }}
-                className="w-full border px-3 py-2 pl-10 rounded"
-              />
-              <span
-                onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer"
-              >
-                {showPassword ? <EyeOffIcon /> : <EyeIcon />}
-              </span>
-            </div>
-            {error.password && (
-              <p className="text-red-500 text-sm mt-1">{error.password}</p>
-            )}
-          </div>
 
-          {generalError && <p className="text-red-500">{generalError}</p>}
-
-          <div className="card-actions justify-center m-2">
-            <button
-              className="btn btn-primary"
-              onClick={isLoginForm ? handleLogin : handleSignUp}
-            >
-              {isLoginForm ? 'Login' : 'Sign Up'}
-            </button>
-          </div>
-
-          <p
-            className="m-auto cursor-pointer py-2 text-blue-600 hover:underline"
-            onClick={() => {
-              setIsLoginForm((prev) => !prev);
-              setError({});
-              setGeneralError('');
-            }}
-          >
-            {isLoginForm
-              ? 'New User? Sign up here'
-              : 'Existing User? Login here'}
-          </p>
+          {/* Password on Login form */}
+          {isLoginForm && (
+            <Password
+              formfields={formfields}
+              setFormFields={setFormFields}
+              showPassword={showPassword}
+              setShowPassword={setShowPassword}
+              error={error}
+              setError={setError}
+            />
+          )}
         </div>
-        {/* Images */}
-        {!isLoginForm && (
-          <>
-            <h2 className="mt-6 card-title justify-center">Profile Images</h2>
-            <div className="card-body flex flex-row justify-center gap-4 w-full">
-              {formfields.imageUrls.map((url, index) => (
-                <>
-                  <img
-                    key={index}
-                    src={url}
-                    alt="Preview"
-                    className="h-96 w-1/5 border-gray-300 border-2 object-cover rounded-2xl"
-                  />
-                  <span
-                    className="badge relative right-[50px] top-[5px] w-8 h-8 bg-red-600 rounded-full hover:cursor-pointer"
-                    onClick={() =>
-                      setFormFields((prev) => ({
-                        ...prev,
-                        imageUrls: prev.imageUrls.filter(
-                          (img) => prev.imageUrls.indexOf(img) !== index
-                        ),
-                      }))
-                    }
-                  >
-                    <CustomImage name="deleteIcon" className="w-[10px] h-[10px]" />
-                  </span>
-                </>
-              ))}
-              <div
-                className={`${formfields.imageUrls.length < 4 ? 'w-1/5' : ''}`}
-              >
-                {formfields.imageUrls.length < 4 && (
-                  <label
-                    htmlFor="image-upload"
-                    className=" h-96 border-2 border-dashed border-gray-300 rounded-2xl flex items-center justify-center cursor-pointer hover:border-blue-400 transition"
-                  >
-                    {
-                      <div className="text-center text-gray-500">
-                        <p className="text-sm">Click or drag an image here</p>
-                        <p className="text-xs mt-1">
-                          JPG, PNG, or GIF (max 5MB)
-                        </p>
-                      </div>
-                    }
-                    <input
-                      id="image-upload"
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={handleImageChange}
-                    />
-                  </label>
-                )}
-              </div>
-              {error.image && formfields.imageUrls.length < 4 && (
-                <p className="text-red-500 flex justify-center text-sm mt-1">
-                  {error.image}
-                </p>
-              )}
-            </div>
-          </>
-        )}
+
+        {generalError && <p className="text-red-500">{generalError}</p>}
+
+        <div className="card-actions justify-center m-2">
+          <button
+            className="btn btn-primary"
+            onClick={isLoginForm ? handleLogin : handleSignUp}
+          >
+            {isLoginForm ? 'Login' : 'Sign Up'}
+          </button>
+        </div>
+
+        <p
+          className="m-auto cursor-pointer py-2 text-blue-600 hover:underline"
+          onClick={() => {
+            setIsLoginForm((prev) => !prev);
+            setError({});
+            setGeneralError('');
+          }}
+        >
+          {isLoginForm
+            ? 'New User? Sign up here'
+            : 'Existing User? Login here'}
+        </p>
       </div>
     </div>
   );
